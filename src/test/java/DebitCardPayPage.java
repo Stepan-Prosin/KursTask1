@@ -12,6 +12,8 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
 public class DebitCardPayPage {
+    DataHelper.SelectInfo selInfo = DataHelper.getSelectInfo();
+    DataHelper.PayInfo info = DataHelper.getPayInfo();
     @BeforeAll
     static void setUpAllure() {
         SelenideLogger.addListener("allure", new AllureSelenide());
@@ -32,12 +34,13 @@ public class DebitCardPayPage {
 
     @Test
     void succesDebitBuy() {
-        $("[placeholder='0000 0000 0000 0000']").sendKeys("1111 2222 3333 4444");
-        $("[placeholder='08']").sendKeys("11");
-        $("[placeholder='22']").sendKeys("24");
-        $("#root > div > form > fieldset > div:nth-child(3) > span > span:nth-child(1) > span > span > span.input__box > input").sendKeys("Влад");
-        $("[placeholder='999']").sendKeys("999");
-        $("form button.button").click();
+
+        $(selInfo.getCard()).sendKeys(info.getCard());
+        $(selInfo.getMonth()).sendKeys(info.getMonth());
+        $(selInfo.getYear()).sendKeys(info.getYear());
+        $(selInfo.getOwner()).sendKeys(info.getOwner());
+        $(selInfo.getCode()).sendKeys(info.getCode());
+        $(selInfo.getButton()).click();
         $(".notification__content")
                 .shouldBe(Condition.visible, Duration.ofSeconds(30))
                 .shouldHave(Condition.exactText("Операция одобрена Банком."));
@@ -45,12 +48,14 @@ public class DebitCardPayPage {
 
     @Test
     void emptyCardDebitBuy() {
-        $("[placeholder='0000 0000 0000 0000']").sendKeys("");
-        $("[placeholder='08']").sendKeys("11");
-        $("[placeholder='22']").sendKeys("24");
-        $("#root > div > form > fieldset > div:nth-child(3) > span > span:nth-child(1) > span > span > span.input__box > input").sendKeys("Влад");
-        $("[placeholder='999']").sendKeys("999");
-        $("form button.button").click();
+
+        $(selInfo.getCard()).setValue("");
+
+        $(selInfo.getMonth()).sendKeys(info.getMonth());
+        $(selInfo.getYear()).sendKeys(info.getYear());
+        $(selInfo.getOwner()).sendKeys(info.getOwner());
+        $(selInfo.getCode()).sendKeys(info.getCode());
+        $(selInfo.getButton()).click();
         $("[class='input__sub']")
                 .shouldBe(Condition.visible, Duration.ofSeconds(10))
                 .shouldHave(Condition.exactText("Неверный формат"));
@@ -58,12 +63,13 @@ public class DebitCardPayPage {
 
     @Test
     void notFullCardDebitBuy() {
-        $("[placeholder='0000 0000 0000 0000']").sendKeys("1111 1111 1");
-        $("[placeholder='08']").sendKeys("11");
-        $("[placeholder='22']").sendKeys("24");
-        $("#root > div > form > fieldset > div:nth-child(3) > span > span:nth-child(1) > span > span > span.input__box > input").sendKeys("Влад");
-        $("[placeholder='999']").sendKeys("999");
-        $("form button.button").click();
+        $(selInfo.getCard()).sendKeys("1111 1111 1");
+
+        $(selInfo.getMonth()).sendKeys(info.getMonth());
+        $(selInfo.getYear()).sendKeys(info.getYear());
+        $(selInfo.getOwner()).sendKeys(info.getOwner());
+        $(selInfo.getCode()).sendKeys(info.getCode());
+        $(selInfo.getButton()).click();
         $("[class='input__sub']")
                 .shouldBe(Condition.visible, Duration.ofSeconds(10))
                 .shouldHave(Condition.exactText("Неверный формат"));
@@ -71,12 +77,12 @@ public class DebitCardPayPage {
 
     @Test
     void notFigureCardDebitBuy() {
-        $("[placeholder='0000 0000 0000 0000']").sendKeys("qeqe breq a");
-        $("[placeholder='08']").sendKeys("11");
-        $("[placeholder='22']").sendKeys("24");
-        $("#root > div > form > fieldset > div:nth-child(3) > span > span:nth-child(1) > span > span > span.input__box > input").sendKeys("Влад");
-        $("[placeholder='999']").sendKeys("999");
-        $("form button.button").click();
+        $(selInfo.getCard()).sendKeys("qeqe breq a");
+        $(selInfo.getMonth()).sendKeys(info.getMonth());
+        $(selInfo.getYear()).sendKeys(info.getYear());
+        $(selInfo.getOwner()).sendKeys(info.getOwner());
+        $(selInfo.getCode()).sendKeys(info.getCode());
+        $(selInfo.getButton()).click();
         $("[class='input__sub']")
                 .shouldBe(Condition.visible, Duration.ofSeconds(10))
                 .shouldHave(Condition.exactText("Неверный формат"));
@@ -84,12 +90,12 @@ public class DebitCardPayPage {
 
     @Test
     void wrongCardDebitBuy() {
-        $("[placeholder='0000 0000 0000 0000']").sendKeys("1111 1111 1111 1111");
-        $("[placeholder='08']").sendKeys("11");
-        $("[placeholder='22']").sendKeys("24");
-        $("#root > div > form > fieldset > div:nth-child(3) > span > span:nth-child(1) > span > span > span.input__box > input").sendKeys("Влад");
-        $("[placeholder='999']").sendKeys("999");
-        $("form button.button").click();
+        $(selInfo.getCard()).sendKeys("1111 1111 1111 1111");
+        $(selInfo.getMonth()).sendKeys(info.getMonth());
+        $(selInfo.getYear()).sendKeys(info.getYear());
+        $(selInfo.getOwner()).sendKeys(info.getOwner());
+        $(selInfo.getCode()).sendKeys(info.getCode());
+        $(selInfo.getButton()).click();
         $("#root > div > div.notification.notification_visible.notification_status_error.notification_has-closer.notification_stick-to_right.notification_theme_alfa-on-white > div.notification__content")
                 .shouldBe(Condition.visible, Duration.ofSeconds(100))
                 .shouldHave(Condition.exactText("Ошибка! Банк отказал в проведении операции."));
@@ -97,12 +103,14 @@ public class DebitCardPayPage {
 
     @Test
     void emptyMonthDebitBuy() {
-        $("[placeholder='0000 0000 0000 0000']").sendKeys("1111 2222 3333 4444");
-        $("[placeholder='08']").sendKeys("");
-        $("[placeholder='22']").sendKeys("24");
-        $("#root > div > form > fieldset > div:nth-child(3) > span > span:nth-child(1) > span > span > span.input__box > input").sendKeys("Влад");
-        $("[placeholder='999']").sendKeys("999");
-        $("form button.button").click();
+
+
+        $(selInfo.getCard()).sendKeys(info.getCard());
+        $(selInfo.getMonth()).sendKeys("");
+        $(selInfo.getYear()).sendKeys(info.getYear());
+        $(selInfo.getOwner()).sendKeys(info.getOwner());
+        $(selInfo.getCode()).sendKeys(info.getCode());
+        $(selInfo.getButton()).click();
         $("[class='input__sub']")
                 .shouldBe(Condition.visible, Duration.ofSeconds(10))
                 .shouldHave(Condition.exactText("Неверный формат"));
@@ -110,12 +118,14 @@ public class DebitCardPayPage {
 
     @Test
     void notFullMonthDebitBuy() {
-        $("[placeholder='0000 0000 0000 0000']").sendKeys("1111 2222 3333 4444");
-        $("[placeholder='08']").sendKeys("5");
-        $("[placeholder='22']").sendKeys("24");
-        $("#root > div > form > fieldset > div:nth-child(3) > span > span:nth-child(1) > span > span > span.input__box > input").sendKeys("Влад");
-        $("[placeholder='999']").sendKeys("999");
-        $("form button.button").click();
+
+
+        $(selInfo.getCard()).sendKeys(info.getCard());
+        $(selInfo.getMonth()).sendKeys("5");
+        $(selInfo.getYear()).sendKeys(info.getYear());
+        $(selInfo.getOwner()).sendKeys(info.getOwner());
+        $(selInfo.getCode()).sendKeys(info.getCode());
+        $(selInfo.getButton()).click();
         $("[class='input__sub']")
                 .shouldBe(Condition.visible, Duration.ofSeconds(10))
                 .shouldHave(Condition.exactText("Неверный формат"));
@@ -123,12 +133,14 @@ public class DebitCardPayPage {
 
     @Test
     void notFigureMonthDebitBuy() {
-        $("[placeholder='0000 0000 0000 0000']").sendKeys("1111 2222 3333 4444");
-        $("[placeholder='08']").sendKeys("at");
-        $("[placeholder='22']").sendKeys("24");
-        $("#root > div > form > fieldset > div:nth-child(3) > span > span:nth-child(1) > span > span > span.input__box > input").sendKeys("Влад");
-        $("[placeholder='999']").sendKeys("999");
-        $("form button.button").click();
+
+
+        $(selInfo.getCard()).sendKeys(info.getCard());
+        $(selInfo.getMonth()).sendKeys("at");
+        $(selInfo.getYear()).sendKeys(info.getYear());
+        $(selInfo.getOwner()).sendKeys(info.getOwner());
+        $(selInfo.getCode()).sendKeys(info.getCode());
+        $(selInfo.getButton()).click();
         $("[class='input__sub']")
                 .shouldBe(Condition.visible, Duration.ofSeconds(10))
                 .shouldHave(Condition.exactText("Неверный формат"));
@@ -136,12 +148,14 @@ public class DebitCardPayPage {
 
     @Test
     void unrealMonthDebitBuy() {
-        $("[placeholder='0000 0000 0000 0000']").sendKeys("1111 2222 3333 4444");
-        $("[placeholder='08']").sendKeys("24");
-        $("[placeholder='22']").sendKeys("24");
-        $("#root > div > form > fieldset > div:nth-child(3) > span > span:nth-child(1) > span > span > span.input__box > input").sendKeys("Влад");
-        $("[placeholder='999']").sendKeys("999");
-        $("form button.button").click();
+
+
+        $(selInfo.getCard()).sendKeys(info.getCard());
+        $(selInfo.getMonth()).sendKeys("24");
+        $(selInfo.getYear()).sendKeys(info.getYear());
+        $(selInfo.getOwner()).sendKeys(info.getOwner());
+        $(selInfo.getCode()).sendKeys(info.getCode());
+        $(selInfo.getButton()).click();
         $("[class='input__sub']")
                 .shouldBe(Condition.visible, Duration.ofSeconds(10))
                 .shouldHave(Condition.exactText("Неверно указан срок действия карты"));
@@ -149,12 +163,14 @@ public class DebitCardPayPage {
 
     @Test
     void pastMonthDebitBuy() {
-        $("[placeholder='0000 0000 0000 0000']").sendKeys("1111 2222 3333 4444");
-        $("[placeholder='08']").sendKeys("01");
-        $("[placeholder='22']").sendKeys("24");
-        $("#root > div > form > fieldset > div:nth-child(3) > span > span:nth-child(1) > span > span > span.input__box > input").sendKeys("Влад");
-        $("[placeholder='999']").sendKeys("999");
-        $("form button.button").click();
+
+
+        $(selInfo.getCard()).sendKeys(info.getCard());
+        $(selInfo.getMonth()).sendKeys("01");
+        $(selInfo.getYear()).sendKeys(info.getYear());
+        $(selInfo.getOwner()).sendKeys(info.getOwner());
+        $(selInfo.getCode()).sendKeys(info.getCode());
+        $(selInfo.getButton()).click();
         $("[class='input__sub']")
                 .shouldBe(Condition.visible, Duration.ofSeconds(10))
                 .shouldHave(Condition.exactText("Неверно указан срок действия карты"));
@@ -162,12 +178,14 @@ public class DebitCardPayPage {
 
     @Test
     void emptyYearDebitBuy() {
-        $("[placeholder='0000 0000 0000 0000']").sendKeys("1111 2222 3333 4444");
-        $("[placeholder='08']").sendKeys("11");
-        $("[placeholder='22']").sendKeys("");
-        $("#root > div > form > fieldset > div:nth-child(3) > span > span:nth-child(1) > span > span > span.input__box > input").sendKeys("Влад");
-        $("[placeholder='999']").sendKeys("999");
-        $("form button.button").click();
+
+
+        $(selInfo.getCard()).sendKeys(info.getCard());
+        $(selInfo.getMonth()).sendKeys(info.getMonth());
+        $(selInfo.getYear()).sendKeys("");
+        $(selInfo.getOwner()).sendKeys(info.getOwner());
+        $(selInfo.getCode()).sendKeys(info.getCode());
+        $(selInfo.getButton()).click();
         $("[class='input__sub']")
                 .shouldBe(Condition.visible, Duration.ofSeconds(10))
                 .shouldHave(Condition.exactText("Неверный формат"));
@@ -175,12 +193,14 @@ public class DebitCardPayPage {
 
     @Test
     void notFullYearDebitBuy() {
-        $("[placeholder='0000 0000 0000 0000']").sendKeys("1111 2222 3333 4444");
-        $("[placeholder='08']").sendKeys("11");
-        $("[placeholder='22']").sendKeys("2");
-        $("#root > div > form > fieldset > div:nth-child(3) > span > span:nth-child(1) > span > span > span.input__box > input").sendKeys("Влад");
-        $("[placeholder='999']").sendKeys("999");
-        $("form button.button").click();
+
+
+        $(selInfo.getCard()).sendKeys(info.getCard());
+        $(selInfo.getMonth()).sendKeys(info.getMonth());
+        $(selInfo.getYear()).sendKeys("2");
+        $(selInfo.getOwner()).sendKeys(info.getOwner());
+        $(selInfo.getCode()).sendKeys(info.getCode());
+        $(selInfo.getButton()).click();
         $("[class='input__sub']")
                 .shouldBe(Condition.visible, Duration.ofSeconds(10))
                 .shouldHave(Condition.exactText("Неверный формат"));
@@ -188,12 +208,13 @@ public class DebitCardPayPage {
 
     @Test
     void notFigureYearDebitBuy() {
-        $("[placeholder='0000 0000 0000 0000']").sendKeys("1111 2222 3333 4444");
-        $("[placeholder='08']").sendKeys("11");
-        $("[placeholder='22']").sendKeys("y&");
-        $("#root > div > form > fieldset > div:nth-child(3) > span > span:nth-child(1) > span > span > span.input__box > input").sendKeys("Влад");
-        $("[placeholder='999']").sendKeys("999");
-        $("form button.button").click();
+
+        $(selInfo.getCard()).sendKeys(info.getCard());
+        $(selInfo.getMonth()).sendKeys(info.getMonth());
+        $(selInfo.getYear()).sendKeys("y&");
+        $(selInfo.getOwner()).sendKeys(info.getOwner());
+        $(selInfo.getCode()).sendKeys(info.getCode());
+        $(selInfo.getButton()).click();
         $("[class='input__sub']")
                 .shouldBe(Condition.visible, Duration.ofSeconds(10))
                 .shouldHave(Condition.exactText("Неверный формат"));
@@ -201,12 +222,13 @@ public class DebitCardPayPage {
 
     @Test
     void unrealYearDebitBuy() {
-        $("[placeholder='0000 0000 0000 0000']").sendKeys("1111 2222 3333 4444");
-        $("[placeholder='08']").sendKeys("11");
-        $("[placeholder='22']").sendKeys("55");
-        $("#root > div > form > fieldset > div:nth-child(3) > span > span:nth-child(1) > span > span > span.input__box > input").sendKeys("Влад");
-        $("[placeholder='999']").sendKeys("999");
-        $("form button.button").click();
+
+        $(selInfo.getCard()).sendKeys(info.getCard());
+        $(selInfo.getMonth()).sendKeys(info.getMonth());
+        $(selInfo.getYear()).sendKeys("55");
+        $(selInfo.getOwner()).sendKeys(info.getOwner());
+        $(selInfo.getCode()).sendKeys(info.getCode());
+        $(selInfo.getButton()).click();
         $("[class='input__sub']")
                 .shouldBe(Condition.visible, Duration.ofSeconds(10))
                 .shouldHave(Condition.exactText("Неверно указан срок действия карты"));
@@ -214,12 +236,13 @@ public class DebitCardPayPage {
 
     @Test
     void pastYearDebitBuy() {
-        $("[placeholder='0000 0000 0000 0000']").sendKeys("1111 2222 3333 4444");
-        $("[placeholder='08']").sendKeys("11");
-        $("[placeholder='22']").sendKeys("11");
-        $("#root > div > form > fieldset > div:nth-child(3) > span > span:nth-child(1) > span > span > span.input__box > input").sendKeys("Влад");
-        $("[placeholder='999']").sendKeys("999");
-        $("form button.button").click();
+
+        $(selInfo.getCard()).sendKeys(info.getCard());
+        $(selInfo.getMonth()).sendKeys(info.getMonth());
+        $(selInfo.getYear()).sendKeys("11");
+        $(selInfo.getOwner()).sendKeys(info.getOwner());
+        $(selInfo.getCode()).sendKeys(info.getCode());
+        $(selInfo.getButton()).click();
         $("[class='input__sub']")
                 .shouldBe(Condition.visible, Duration.ofSeconds(10))
                 .shouldHave(Condition.exactText("Истёк срок действия карты"));
@@ -227,12 +250,14 @@ public class DebitCardPayPage {
 
     @Test
     void notRussiaOwnerDebitBuy() {
-        $("[placeholder='0000 0000 0000 0000']").sendKeys("1111 2222 3333 4444");
-        $("[placeholder='08']").sendKeys("11");
-        $("[placeholder='22']").sendKeys("24");
-        $("#root > div > form > fieldset > div:nth-child(3) > span > span:nth-child(1) > span > span > span.input__box > input").sendKeys("jаc4");
-        $("[placeholder='999']").sendKeys("999");
-        $("form button.button").click();
+
+
+        $(selInfo.getCard()).sendKeys(info.getCard());
+        $(selInfo.getMonth()).sendKeys(info.getMonth());
+        $(selInfo.getYear()).sendKeys(info.getYear());
+        $(selInfo.getOwner()).sendKeys("jac4");
+        $(selInfo.getCode()).sendKeys(info.getCode());
+        $(selInfo.getButton()).click();
         $("[class='input__sub']")
                 .shouldBe(Condition.visible, Duration.ofSeconds(10))
                 .shouldHave(Condition.exactText("Поле обязательно для заполнения"));
@@ -240,12 +265,13 @@ public class DebitCardPayPage {
 
     @Test
     void toMuchLetterDebitBuy() {
-        $("[placeholder='0000 0000 0000 0000']").sendKeys("1111 2222 3333 4444");
-        $("[placeholder='08']").sendKeys("11");
-        $("[placeholder='22']").sendKeys("24");
-        $("#root > div > form > fieldset > div:nth-child(3) > span > span:nth-child(1) > span > span > span.input__box > input").sendKeys("Владдддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд");
-        $("[placeholder='999']").sendKeys("999");
-        $("form button.button").click();
+
+        $(selInfo.getCard()).sendKeys(info.getCard());
+        $(selInfo.getMonth()).sendKeys(info.getMonth());
+        $(selInfo.getYear()).sendKeys(info.getYear());
+        $(selInfo.getOwner()).sendKeys("Владддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд");
+        $(selInfo.getCode()).sendKeys(info.getCode());
+        $(selInfo.getButton()).click();
         $(".notification__content")
                 .shouldBe(Condition.visible, Duration.ofSeconds(100))
                 .shouldHave(Condition.exactText("Операция одобрена Банком."));
@@ -253,12 +279,12 @@ public class DebitCardPayPage {
 
     @Test
     void emptyOwnerDebitBuy() {
-        $("[placeholder='0000 0000 0000 0000']").sendKeys("1111 2222 3333 4444");
-        $("[placeholder='08']").sendKeys("11");
-        $("[placeholder='22']").sendKeys("24");
-        $("#root > div > form > fieldset > div:nth-child(3) > span > span:nth-child(1) > span > span > span.input__box > input").sendKeys("");
-        $("[placeholder='999']").sendKeys("999");
-        $("form button.button").click();
+        $(selInfo.getCard()).sendKeys(info.getCard());
+        $(selInfo.getMonth()).sendKeys(info.getMonth());
+        $(selInfo.getYear()).sendKeys(info.getYear());
+        $(selInfo.getOwner()).sendKeys("");
+        $(selInfo.getCode()).sendKeys(info.getCode());
+        $(selInfo.getButton()).click();
         $("[class='input__sub']")
                 .shouldBe(Condition.visible, Duration.ofSeconds(10))
                 .shouldHave(Condition.exactText("Поле обязательно для заполнения"));
@@ -266,12 +292,13 @@ public class DebitCardPayPage {
 
     @Test
     void emptyVerificationCodeDebitBuy() {
-        $("[placeholder='0000 0000 0000 0000']").sendKeys("1111 2222 3333 4444");
-        $("[placeholder='08']").sendKeys("11");
-        $("[placeholder='22']").sendKeys("24");
-        $("#root > div > form > fieldset > div:nth-child(3) > span > span:nth-child(1) > span > span > span.input__box > input").sendKeys("Влад");
-        $("[placeholder='999']").sendKeys("");
-        $("form button.button").click();
+
+        $(selInfo.getCard()).sendKeys(info.getCard());
+        $(selInfo.getMonth()).sendKeys(info.getMonth());
+        $(selInfo.getYear()).sendKeys(info.getYear());
+        $(selInfo.getOwner()).sendKeys(info.getOwner());
+        $(selInfo.getCode()).sendKeys("");
+        $(selInfo.getButton()).click();
         $("[class='input__sub']")
                 .shouldBe(Condition.visible, Duration.ofSeconds(10))
                 .shouldHave(Condition.exactText("Неверный формат"));
@@ -279,12 +306,13 @@ public class DebitCardPayPage {
 
     @Test
     void notFullVerificationCodeDebitBuy() {
-        $("[placeholder='0000 0000 0000 0000']").sendKeys("1111 2222 3333 4444");
-        $("[placeholder='08']").sendKeys("11");
-        $("[placeholder='22']").sendKeys("24");
-        $("#root > div > form > fieldset > div:nth-child(3) > span > span:nth-child(1) > span > span > span.input__box > input").sendKeys("Влад");
-        $("[placeholder='999']").sendKeys("99");
-        $("form button.button").click();
+
+        $(selInfo.getCard()).sendKeys(info.getCard());
+        $(selInfo.getMonth()).sendKeys(info.getMonth());
+        $(selInfo.getYear()).sendKeys(info.getYear());
+        $(selInfo.getOwner()).sendKeys(info.getOwner());
+        $(selInfo.getCode()).sendKeys("99");
+        $(selInfo.getButton()).click();
         $("[class='input__sub']")
                 .shouldBe(Condition.visible, Duration.ofSeconds(10))
                 .shouldHave(Condition.exactText("Неверный формат"));
@@ -292,12 +320,13 @@ public class DebitCardPayPage {
 
     @Test
     void notFigureVerificationCodeDebitBuy() {
-        $("[placeholder='0000 0000 0000 0000']").sendKeys("1111 2222 3333 4444");
-        $("[placeholder='08']").sendKeys("11");
-        $("[placeholder='22']").sendKeys("24");
-        $("#root > div > form > fieldset > div:nth-child(3) > span > span:nth-child(1) > span > span > span.input__box > input").sendKeys("Влад");
-        $("[placeholder='999']").sendKeys("abc");
-        $("form button.button").click();
+
+        $(selInfo.getCard()).sendKeys(info.getCard());
+        $(selInfo.getMonth()).sendKeys(info.getMonth());
+        $(selInfo.getYear()).sendKeys(info.getYear());
+        $(selInfo.getOwner()).sendKeys(info.getOwner());
+        $(selInfo.getCode()).sendKeys("abc");
+        $(selInfo.getButton()).click();
         $("[class='input__sub']")
                 .shouldBe(Condition.visible, Duration.ofSeconds(10))
                 .shouldHave(Condition.exactText("Неверный формат"));
@@ -305,12 +334,12 @@ public class DebitCardPayPage {
 
     @Test
     void toManyVerificationCodeDebitBuy() {
-        $("[placeholder='0000 0000 0000 0000']").sendKeys("1111 2222 3333 4444");
-        $("[placeholder='08']").sendKeys("11");
-        $("[placeholder='22']").sendKeys("24");
-        $("#root > div > form > fieldset > div:nth-child(3) > span > span:nth-child(1) > span > span > span.input__box > input").sendKeys("Влад");
-        $("[placeholder='999']").sendKeys("9999");
-        $("form button.button").click();
+        $(selInfo.getCard()).sendKeys(info.getCard());
+        $(selInfo.getMonth()).sendKeys(info.getMonth());
+        $(selInfo.getYear()).sendKeys(info.getYear());
+        $(selInfo.getOwner()).sendKeys(info.getOwner());
+        $(selInfo.getCode()).sendKeys("9999");
+        $(selInfo.getButton()).click();
         $(".notification__content")
                 .shouldBe(Condition.visible, Duration.ofSeconds(30))
                 .shouldHave(Condition.exactText("Операция одобрена Банком."));
@@ -318,12 +347,14 @@ public class DebitCardPayPage {
 
     @Test
     void toManyYearDebitBuy() {
-        $("[placeholder='0000 0000 0000 0000']").sendKeys("1111 2222 3333 4444");
-        $("[placeholder='08']").sendKeys("11");
-        $("[placeholder='22']").sendKeys("244");
-        $("#root > div > form > fieldset > div:nth-child(3) > span > span:nth-child(1) > span > span > span.input__box > input").sendKeys("Влад");
-        $("[placeholder='999']").sendKeys("999");
-        $("form button.button").click();
+
+
+        $(selInfo.getCard()).sendKeys(info.getCard());
+        $(selInfo.getMonth()).sendKeys(info.getMonth());
+        $(selInfo.getYear()).sendKeys("244");
+        $(selInfo.getOwner()).sendKeys(info.getOwner());
+        $(selInfo.getCode()).sendKeys(info.getCode());
+        $(selInfo.getButton()).click();
         $(".notification__content")
                 .shouldBe(Condition.visible, Duration.ofSeconds(30))
                 .shouldHave(Condition.exactText("Операция одобрена Банком."));
@@ -331,12 +362,13 @@ public class DebitCardPayPage {
 
     @Test
     void toManyMonthDebitBuy() {
-        $("[placeholder='0000 0000 0000 0000']").sendKeys("1111 2222 3333 4444");
-        $("[placeholder='08']").sendKeys("111");
-        $("[placeholder='22']").sendKeys("24");
-        $("#root > div > form > fieldset > div:nth-child(3) > span > span:nth-child(1) > span > span > span.input__box > input").sendKeys("Влад");
-        $("[placeholder='999']").sendKeys("999");
-        $("form button.button").click();
+
+        $(selInfo.getCard()).sendKeys(info.getCard());
+        $(selInfo.getMonth()).sendKeys("111");
+        $(selInfo.getYear()).sendKeys(info.getYear());
+        $(selInfo.getOwner()).sendKeys(info.getOwner());
+        $(selInfo.getCode()).sendKeys(info.getCode());
+        $(selInfo.getButton()).click();
         $(".notification__content")
                 .shouldBe(Condition.visible, Duration.ofSeconds(30))
                 .shouldHave(Condition.exactText("Операция одобрена Банком."));
@@ -344,14 +376,14 @@ public class DebitCardPayPage {
 
     @Test
     void toManyCardDebitBuy() {
-        $("[placeholder='0000 0000 0000 0000']").sendKeys("1111 2222 3333 4444 2222");
-        $("[placeholder='08']").sendKeys("11");
-        $("[placeholder='22']").sendKeys("24");
-        $("#root > div > form > fieldset > div:nth-child(3) > span > span:nth-child(1) > span > span > span.input__box > input").sendKeys("Влад");
-        $("[placeholder='999']").sendKeys("999");
-        $("form button.button").click();
+
+        $(selInfo.getCard()).sendKeys("1111 2222 3333 4444 2222");
+        $(selInfo.getMonth()).sendKeys(info.getMonth());
+        $(selInfo.getYear()).sendKeys(info.getYear());
+        $(selInfo.getOwner()).sendKeys(info.getOwner());
+        $(selInfo.getCode()).sendKeys(info.getCode());
+        $(selInfo.getButton()).click();
         $(".notification__content")
                 .shouldBe(Condition.visible, Duration.ofSeconds(30))
                 .shouldHave(Condition.exactText("Операция одобрена Банком."));
-    }
-}
+    }}
