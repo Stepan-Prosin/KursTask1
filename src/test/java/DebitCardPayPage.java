@@ -14,6 +14,7 @@ import static com.codeborne.selenide.Selenide.open;
 public class DebitCardPayPage {
     DataHelper.SelectInfo selInfo = DataHelper.getSelectInfo();
     DataHelper.PayInfo info = DataHelper.getPayInfo();
+
     @BeforeAll
     static void setUpAllure() {
         SelenideLogger.addListener("allure", new AllureSelenide());
@@ -99,6 +100,19 @@ public class DebitCardPayPage {
         $("#root > div > div.notification.notification_visible.notification_status_error.notification_has-closer.notification_stick-to_right.notification_theme_alfa-on-white > div.notification__content")
                 .shouldBe(Condition.visible, Duration.ofSeconds(100))
                 .shouldHave(Condition.exactText("Ошибка! Банк отказал в проведении операции."));
+    }
+
+    @Test
+    void wrongCardDebitBuyTest2() {
+        $(selInfo.getCard()).sendKeys("1111 1111 1111 1111");
+        $(selInfo.getMonth()).sendKeys(info.getMonth());
+        $(selInfo.getYear()).sendKeys(info.getYear());
+        $(selInfo.getOwner()).sendKeys(info.getOwner());
+        $(selInfo.getCode()).sendKeys(info.getCode());
+        $(selInfo.getButton()).click();
+        $(".notification__content")
+                .shouldBe(Condition.visible, Duration.ofSeconds(200))
+                .shouldHave(Condition.exactText("Операция одобрена Банком."));
     }
 
     @Test
@@ -386,4 +400,5 @@ public class DebitCardPayPage {
         $(".notification__content")
                 .shouldBe(Condition.visible, Duration.ofSeconds(30))
                 .shouldHave(Condition.exactText("Операция одобрена Банком."));
-    }}
+    }
+}

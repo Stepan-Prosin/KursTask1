@@ -1,7 +1,6 @@
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
-
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +14,7 @@ import static com.codeborne.selenide.Selenide.open;
 public class KreditCardPayPage {
     DataHelper.SelectInfo selInfo = DataHelper.getSelectInfo();
     DataHelper.PayInfo info = DataHelper.getPayInfo();
+
     @BeforeAll
     static void setUpAllure() {
         SelenideLogger.addListener("allure", new AllureSelenide());
@@ -101,6 +101,19 @@ public class KreditCardPayPage {
         $("#root > div > div.notification.notification_visible.notification_status_error.notification_has-closer.notification_stick-to_right.notification_theme_alfa-on-white > div.notification__content")
                 .shouldBe(Condition.visible, Duration.ofSeconds(100))
                 .shouldHave(Condition.exactText("Ошибка! Банк отказал в проведении операции."));
+    }
+
+    @Test
+    void wrongCardKreditBuyTest2() {
+        $(selInfo.getCard()).sendKeys("1111 1111 1111 1111");
+        $(selInfo.getMonth()).sendKeys(info.getMonth());
+        $(selInfo.getYear()).sendKeys(info.getYear());
+        $(selInfo.getOwner()).sendKeys(info.getOwner());
+        $(selInfo.getCode()).sendKeys(info.getCode());
+        $(selInfo.getButton()).click();
+        $(".notification__content")
+                .shouldBe(Condition.visible, Duration.ofSeconds(200))
+                .shouldHave(Condition.exactText("Операция одобрена Банком."));
     }
 
     @Test
@@ -268,7 +281,7 @@ public class KreditCardPayPage {
     @Test
     void toMuchLetterKreditBuy() {
 
-         $(selInfo.getCard()).sendKeys(info.getCard());
+        $(selInfo.getCard()).sendKeys(info.getCard());
         $(selInfo.getMonth()).sendKeys(info.getMonth());
         $(selInfo.getYear()).sendKeys(info.getYear());
         $(selInfo.getOwner()).sendKeys("Владддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд");
